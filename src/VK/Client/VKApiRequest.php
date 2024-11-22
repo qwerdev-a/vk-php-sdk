@@ -73,26 +73,42 @@ class VKApiRequest
      * @throws VKClientException
      * @throws VKApiException
      */
-    public function post(string $method, string $access_token, array $params = array())
+    public function post(string $method, string $access_token, array $params = []): mixed
     {
-        $params = $this->formatParams($params);
-        $params[static::PARAM_ACCESS_TOKEN] = $access_token;
-
-        if (!isset($params[static::PARAM_VERSION])) {
-            $params[static::PARAM_VERSION] = $this->version;
-        }
-
-        if ($this->language && !isset($params[static::PARAM_LANG])) {
-            $params[static::PARAM_LANG] = $this->language;
-        }
-
+        $query_data = [
+            self::PARAM_VERSION      => $this->version,
+            self::PARAM_ACCESS_TOKEN => $access_token,
+            self::PARAM_LANG         => $this->language,
+        ];
         try {
-            $response = $this->client->post("{$this->host}/{$method}?" . http_build_query($params));
-        } catch (GuzzleException $exception) {
+            $response = $this->client->post(
+                "{$this->host}/{$method}?" . http_build_query($query_data),
+                [
+                    'form_params' => $params,
+                ]
+            );
+ 
+            if ($response->getStatusCode() !== static::HTTP_STATUS_CODE_OK) {
+                throw new VKClientException("Invalid http status: {$response->getStatusCode()}");
+            }
+
+            $body = $response->getBody()->getContents();
+            $decode_body = $this->decodeBody($body);
+
+            if (isset($decode_body[static::KEY_ERROR])) {
+                $error = $decode_body[static::KEY_ERROR];
+                $api_error = new VKApiError($error);
+                throw ExceptionMapper::parse($api_error);
+            }
+
+            if (isset($decode_body[static::KEY_RESPONSE])) {
+                return $decode_body[static::KEY_RESPONSE];
+            }
+
+            return $decode_body;
+        } catch (\Exception $exception) {
             throw new VKClientException($exception);
         }
-
-        return $this->parseResponse($response);
     }
 
     /**
