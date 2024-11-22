@@ -17,7 +17,7 @@ found [here](https://github.com/VKCOM/vk-api-schema). It uses VK API [version](h
 The VK PHP SDK can be installed using Composer by running the following command:
 
 ```sh
-composer require vkcom/vk-php-sdk
+composer require qwerdev-a/vk-php-sdk
 ```
 
 ## 3. Initialization
