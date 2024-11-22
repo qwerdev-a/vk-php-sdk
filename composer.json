@@ -17,5 +17,5 @@
       "VK\\": "src/VK"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }
