@@ -6,7 +6,7 @@ can be found [here](http://vk.com/dev).
 This library has been created using the VK API JSON Schema. It can be
 found [here](https://github.com/VKCOM/vk-api-schema). It uses VK API [version](https://vk.com/dev/versions) 5.131
 
-[![Packagist](https://img.shields.io/packagist/v/vkcom/vk-php-sdk.svg)](https://packagist.org/packages/qwerdev-a/vk-php-sdk)
+[![Packagist](https://img.shields.io/packagist/v/qwerdev-a/vk-php-sdk.svg)](https://packagist.org/packages/qwerdev-a/vk-php-sdk)
 
 ## 1. Prerequisites
 
